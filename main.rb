@@ -19,4 +19,24 @@ module Enumerable
     my_each { |element| yield(element) ? output.push(element) : nil }
     output
   end
+
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+  def my_all?(arg = nil)
+    output = true
+    my_each do |element|
+      if output
+        if block_given?
+          output = false unless yield(element)
+        elsif arg
+          output = element.is_a?(arg) unless arg.is_a?(Regexp)
+          output = element.match?(arg) if arg.is_a?(Regexp)
+        else
+          output = false unless element
+        end
+      end
+    end
+    output
+  end
+
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
 end
