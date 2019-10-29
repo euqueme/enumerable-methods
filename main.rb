@@ -72,5 +72,19 @@ module Enumerable
     output
   end
 
+  def my_count(arg = nil)
+    counter = 0
+    my_each do |element|
+      if block_given?
+        counter += 1 if yield(element)
+      elsif arg
+        counter += 1 if element == arg
+        counter += 1 if arg.is_a?(Regexp) && element.match?(arg)
+      else
+        counter += 1
+      end
+    end
+    counter
+  end
   # rubocop:enable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
 end
