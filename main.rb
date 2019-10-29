@@ -55,5 +55,22 @@ module Enumerable
     output
   end
 
+  def my_none?(arg = nil)
+    output = true
+    my_each do |element|
+      if output
+        if block_given?
+          output = false if yield(element)
+        elsif arg
+          output = !element.is_a?(arg) unless arg.is_a?(Regexp)
+          output = !element.match?(arg) if arg.is_a?(Regexp)
+        elsif element
+          output = false
+        end
+      end
+    end
+    output
+  end
+
   # rubocop:enable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
 end
