@@ -4,13 +4,13 @@
 module Enumerable
   def my_each
     size.times do |i|
-      yield self[i]
+      is_a?(Range) ? yield(min + i) : yield(self[i])
     end
   end
 
   def my_each_with_index
     size.times do |i|
-      yield self[i], i
+      is_a?(Range) ? yield(min + i, i) : yield(self[i], i)
     end
   end
 
@@ -86,5 +86,11 @@ module Enumerable
     end
     counter
   end
+
   # rubocop:enable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+  def my_map
+    output = []
+    my_each { |element| output.push(yield(element)) }
+    output
+  end
 end
