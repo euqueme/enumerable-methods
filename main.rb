@@ -101,3 +101,9 @@ module Enumerable
     output
   end
 end
+
+def multiply_els(arg = [])
+  arg.my_inject { |multiply, n| multiply * n }
+end
+
+puts multiply_els([2, 4, 5])
