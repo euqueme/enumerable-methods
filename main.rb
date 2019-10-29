@@ -88,9 +88,13 @@ module Enumerable
   end
 
   # rubocop:enable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
-  def my_map
+  def my_map(enumerable = nil, &proc)
     output = []
-    my_each { |element| output.push(yield(element)) }
+    if block_given?
+      my_each { |element| output.push(yield(element)) }
+    elsif enumerable && proc
+      enumerable.my_each { |element| output << proc.call(element) }
+    end
     output
   end
 
@@ -107,3 +111,7 @@ def multiply_els(arg = [])
 end
 
 puts multiply_els([2, 4, 5])
+
+a = [18, 22, 5, 6]
+my_proc = proc { |num| num > 10 }
+puts a.my_map(a, &my_proc)
