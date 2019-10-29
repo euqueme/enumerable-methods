@@ -93,4 +93,11 @@ module Enumerable
     my_each { |element| output.push(yield(element)) }
     output
   end
+
+  def my_inject(arg = nil)
+    output = is_a?(Range) ? min : self[0]
+    my_each_with_index { |ele, i| output = yield(output, ele) if i.positive? }
+    output = yield(output, arg) if arg
+    output
+  end
 end
