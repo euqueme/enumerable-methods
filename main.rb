@@ -20,7 +20,7 @@ module Enumerable
     output
   end
 
-  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def my_all?(arg = nil)
     output = true
     my_each do |element|
@@ -87,7 +87,7 @@ module Enumerable
     counter
   end
 
-  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def my_map(proc = nil)
     output = []
     if block_given?
