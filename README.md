@@ -25,7 +25,7 @@
     <img src="img/mLogo.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">Bubble Sort</h3>
+  <h3 align="center">Enumerables</h3>
 
   <p align="center">
     This project is part of the Microverse Ruby curriculum!
