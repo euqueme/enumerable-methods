@@ -1,23 +1,37 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/ModuleLength
+
 # Maru's Enumerables
 module Enumerable
   def my_each
-    size.times do |i|
-      is_a?(Range) ? yield(min + i) : yield(self[i])
+    if block_given?
+      size.times do |i|
+        is_a?(Range) ? yield(min + i) : yield(self[i])
+      end
+    else
+      self
     end
   end
 
   def my_each_with_index
-    size.times do |i|
-      is_a?(Range) ? yield(min + i, i) : yield(self[i], i)
+    if block_given?
+      size.times do |i|
+        is_a?(Range) ? yield(min + i, i) : yield(self[i], i)
+      end
+    else
+      self
     end
   end
 
   def my_select
-    output = []
-    my_each { |element| yield(element) ? output.push(element) : nil }
-    output
+    if block_given?
+      output = []
+      my_each { |element| yield(element) ? output.push(element) : nil }
+      output
+    else
+      self
+    end
   end
 
   # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
@@ -27,9 +41,11 @@ module Enumerable
       if output
         if block_given?
           output = false unless yield(element)
-        elsif arg
+        elsif arg.is_a?(Class) || arg.is_a?(Regexp)
           output = element.is_a?(arg) unless arg.is_a?(Regexp)
           output = element.match?(arg) if arg.is_a?(Regexp)
+        elsif arg
+          output = true if element == arg
         else
           output = false unless element
         end
@@ -38,35 +54,18 @@ module Enumerable
     output
   end
 
-  def my_any?(arg = nil)
+  def my_any?(arg = nil, &block)
     output = false
     my_each do |element|
-      if output == false
-        if block_given?
-          output = yield(element)
-        elsif arg
-          output = element.is_a?(arg) unless arg.is_a?(Regexp)
-          output = element.match?(arg) if arg.is_a?(Regexp)
-        else
-          output = true unless element
-        end
-      end
-    end
-    output
-  end
-
-  def my_none?(arg = nil)
-    output = true
-    my_each do |element|
-      if output
-        if block_given?
-          output = false if yield(element)
-        elsif arg
-          output = !element.is_a?(arg) unless arg.is_a?(Regexp)
-          output = !element.match?(arg) if arg.is_a?(Regexp)
-        elsif element
-          output = false
-        end
+      if block_given?
+        output ||= block.call(element) unless output
+      elsif arg.is_a?(Class) || arg.is_a?(Regexp)
+        output ||= element.is_a?(arg) unless arg.is_a?(Regexp)
+        output ||= element.match?(arg) if arg.is_a?(Regexp)
+      elsif arg
+        output = true if element == arg
+      elsif element || output
+        output = true
       end
     end
     output
@@ -87,7 +86,25 @@ module Enumerable
     counter
   end
 
+  def my_inject(arg = nil, arg2 = nil)
+    output = is_a?(Range) ? min : self[0]
+    if block_given?
+      my_each_with_index { |ele, i| output = yield(output, ele) if i.positive? }
+      output = yield(output, arg) if arg
+    elsif arg.is_a?(Symbol) || arg.is_a?(String)
+      my_each_with_index { |ele, i| output = output.send(arg, ele) if i.positive? }
+    elsif arg2.is_a?(Symbol) || arg2.is_a?(String)
+      my_each_with_index { |ele, i| output = output.send(arg2, ele) if i.positive? }
+      output = output.send(arg2, arg)
+    end
+    output
+  end
+
   # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def my_none?(arg = nil, &block)
+    !my_any?(arg, &block)
+  end
+
   def my_map(proc = nil)
     output = []
     if block_given?
@@ -95,18 +112,14 @@ module Enumerable
       my_each { |element| output << proc.call(element) } if proc
     elsif proc
       my_each { |element| output << proc.call(element) }
+    else
+      return self
     end
-    output
-  end
-
-  def my_inject(arg = nil)
-    output = is_a?(Range) ? min : self[0]
-    my_each_with_index { |ele, i| output = yield(output, ele) if i.positive? }
-    output = yield(output, arg) if arg
     output
   end
 end
 
+# rubocop:enable Metrics/ModuleLength
 def multiply_els(arg = [])
   arg.my_inject { |multiply, n| multiply * n }
 end
