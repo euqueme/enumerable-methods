@@ -45,7 +45,7 @@ module Enumerable
           output = element.is_a?(arg) unless arg.is_a?(Regexp)
           output = element.match?(arg) if arg.is_a?(Regexp)
         elsif arg
-          output = true if element == arg
+          output = element == arg
         else
           output = false unless element
         end
