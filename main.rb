@@ -10,7 +10,7 @@ module Enumerable
         is_a?(Range) ? yield(min + i) : yield(self[i])
       end
     else
-      self
+      to_enum
     end
   end
 
@@ -20,7 +20,7 @@ module Enumerable
         is_a?(Range) ? yield(min + i, i) : yield(self[i], i)
       end
     else
-      self
+      to_enum
     end
   end
 
@@ -30,7 +30,7 @@ module Enumerable
       my_each { |element| yield(element) ? output.push(element) : nil }
       output
     else
-      self
+      to_enum
     end
   end
 
@@ -113,7 +113,7 @@ module Enumerable
     elsif proc
       my_each { |element| output << proc.call(element) }
     else
-      return self
+      return to_enum
     end
     output
   end
