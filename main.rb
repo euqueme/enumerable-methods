@@ -20,6 +20,7 @@ module Enumerable
       size.times do |i|
         is_a?(Range) ? yield(min + i, i) : yield(self[i], i)
       end
+      self
     else
       to_enum
     end
