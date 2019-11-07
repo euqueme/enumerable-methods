@@ -76,11 +76,11 @@ module Enumerable
   def my_count(arg = nil)
     counter = 0
     my_each do |element|
-      if block_given?
-        counter += 1 if yield(element)
-      elsif arg
+      if arg
         counter += 1 if element == arg
         counter += 1 if arg.is_a?(Regexp) && element.match?(arg)
+      elsif block_given?
+        counter += 1 if yield(element)
       else
         counter += 1
       end
