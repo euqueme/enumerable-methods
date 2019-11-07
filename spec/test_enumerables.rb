@@ -140,4 +140,52 @@ RSpec.describe Enumerable do
       expect(arr_string.my_any?(Numeric) { |word| word.length >= 3 }).to eq(false)
     end
   end
+
+  describe '#my_none?' do
+    it 'When no block and no argument are given, returns `false` when one of the elementes is truthy != (nil, false)' do
+      expect(arr_truthy.my_none?).to eq(false)
+    end
+
+    it 'When an array is empty and no block is given, will return `true`' do
+      expect(arr_empty.my_none?).to eq(true)
+    end
+
+    it 'raises an ArgumentError when more than one arguments are given' do
+      expect { array.my_none?(String, 1) }.to raise_error(ArgumentError)
+    end
+
+    it 'When block is given, it evaluates the elements and returns `false` when one of them meets the condition' do
+      expect(arr_string.my_none? { |word| word.length >= 3 }).to eq(false)
+    end
+
+    # rubocop:disable Metrics/LineLength
+    it 'When a RegEx is passed as an argument, it evaluates the elements and returns `false` when one of them matches the RegEx' do
+      # rubocop:enable Metrics/LineLength
+      expect(arr_string.my_none?(/t/)).to eq(false)
+    end
+
+    # rubocop:disable Metrics/LineLength
+    it 'When a Class is passed as an argument, it evaluates the elements and returns `false` when one of them it´s an instance of the Class' do
+      # rubocop:enable Metrics/LineLength
+      expect(arr_numeric.my_none?(Numeric)).to eq(false)
+    end
+
+    # rubocop:disable Metrics/LineLength
+    it 'When an argument (not a Class or RegEx) is passed, it evaluates the elements and returns `false` when one of them it´s an instance of the Class' do
+      # rubocop:enable Metrics/LineLength
+      expect(arr_numeric.my_none?(2)).to eq(true)
+    end
+
+    # rubocop:disable Metrics/LineLength
+    it 'When an argument and a block are given, it ignores the block and returns `false` if one of the elements meets the condition in the argument' do
+      # rubocop:enable Metrics/LineLength
+      expect(arr_string.my_none?(Numeric) { |word| word.length >= 3 }).to eq(true)
+    end
+
+    it 'validates that my_none is the negation of my_any method' do
+      # rubocop:disable Metrics/LineLength
+      expect(arr_string.my_none?(Numeric) { |word| word.length >= 3 }).to eq(!arr_string.any?(Numeric) { |word| word.length >= 3 })
+      # rubocop:enable Metrics/LineLength
+    end
+  end
 end
