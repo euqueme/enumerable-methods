@@ -18,7 +18,7 @@ RSpec.describe Enumerable do
 
     it 'returns the same as each method when a block is given' do
       # rubocop:disable Metrics/LineLength
-      expect(array.my_each { |element| puts "result: #{element}" }).to eq([1, 2, 3].each { |element| puts "result: #{element}" })
+      expect(array.my_each { |element| puts "result: #{element}" }).to eq(array.each { |element| puts "result: #{element}" })
       # rubocop:enable Metrics/LineLength
     end
 
@@ -210,6 +210,58 @@ RSpec.describe Enumerable do
     it 'When an argument (not a Class or RegEx) is passed, it evaluates the elements and returns the elements that meets the conditions' do
       # rubocop:enable Metrics/LineLength
       expect(array.my_count(2)).to eq(2)
+    end
+  end
+
+  describe '#my_inject' do
+    # rubocop:disable Metrics/LineLength
+    it 'When block is given, it passes each element as an argument of the method in the block and stores it in the memo variable, returns the result of memo at the end' do
+      # rubocop:enable Metrics/LineLength
+      expect(array.my_inject { |memo, element| memo / element }).to eq(0)
+    end
+
+    # rubocop:disable Metrics/LineLength
+    it 'When two argument are given, it passes each element and the first argument as an argument of the method provided in the second argument and returns the result ' do
+      # rubocop:enable Metrics/LineLength
+      expect(array.my_inject(2, :+) { |memo, element| memo / element }).to eq(10)
+    end
+
+    # rubocop:disable Metrics/LineLength
+    it 'When block and an argument are given, it passes each element and the argument as an argument of the method in the block and stores it in the memo variable, returns the result of memo at the end' do
+      # rubocop:enable Metrics/LineLength
+      expect(array.my_inject { |memo, element| memo * element }).to eq(12)
+    end
+
+    # rubocop:disable Metrics/LineLength
+    it 'When block and two argument are given, it ignores the block and it passes each element and the argument as an argument of the method provided in the second argument and returns the result ' do
+      # rubocop:enable Metrics/LineLength
+      expect(array.my_inject(2, :+) { |memo, element| memo / element }).to eq(10)
+    end
+
+    it 'When an array is empty and no block is given, will return nil' do
+      expect(arr_empty.my_inject).to eq(nil)
+    end
+
+    it 'raises an ArgumentError when more than two arguments are given' do
+      expect { array.my_inject(1, :*, 2) }.to raise_error(ArgumentError)
+    end
+
+    it 'raises a NoMethodError when the second argument is not a method' do
+      expect { array.my_inject(:*, 'Numeric') }.to raise_error(NoMethodError)
+    end
+
+    it 'raises a NoMethodError when none of the two arguments is a method' do
+      expect { array.my_inject(Numeric, 'RegEx') }.to raise_error(NoMethodError)
+    end
+
+    # rubocop:disable Metrics/LineLength
+    it 'raises an TypeError when the second argument is a method but the first argument is not a valid argument for that method' do
+      # rubocop:enable Metrics/LineLength
+      expect { array.my_inject(String, :*) }.to raise_error(TypeError)
+    end
+
+    it 'raises an NoMethodError when block is given but the method in the block is not an operator' do
+      expect { array.my_inject { |memo, element| memo > element } }.to raise_error(NoMethodError)
     end
   end
 end

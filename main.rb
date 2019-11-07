@@ -90,14 +90,14 @@ module Enumerable
 
   def my_inject(arg = nil, arg2 = nil)
     output = is_a?(Range) ? min : self[0]
-    if block_given?
+    if arg2.is_a?(Symbol) || arg2.is_a?(String)
+      my_each_with_index { |ele, i| output = output.send(arg2, ele) if i.positive? }
+      output = output.send(arg2, arg)
+    elsif block_given?
       my_each_with_index { |ele, i| output = yield(output, ele) if i.positive? }
       output = yield(output, arg) if arg
     elsif arg.is_a?(Symbol) || arg.is_a?(String)
       my_each_with_index { |ele, i| output = output.send(arg, ele) if i.positive? }
-    elsif arg2.is_a?(Symbol) || arg2.is_a?(String)
-      my_each_with_index { |ele, i| output = output.send(arg2, ele) if i.positive? }
-      output = output.send(arg2, arg)
     end
     output
   end
