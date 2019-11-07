@@ -85,5 +85,59 @@ RSpec.describe Enumerable do
     it 'When a Class is passed as an argument, it will evaluate all the elements and will return a boolean' do
       expect(arr_numeric.my_all?(Numeric)).to eq(true)
     end
+
+    # rubocop:disable Metrics/LineLength
+    it 'When an argument (not a Class or RegEx) is passed, it evaluates the elements and returns true when one of them it´s an instance of the Class' do
+      # rubocop:enable Metrics/LineLength
+      expect(arr_numeric.my_all?(2)).to eq(false)
+    end
+
+    # rubocop:disable Metrics/LineLength
+    it 'When an argument and a block are given, it ignores the block and returns true if one of the elements meets the condition in the argument' do
+      # rubocop:enable Metrics/LineLength
+      expect(arr_string.my_all?(Numeric) { |word| word.length >= 3 }).to eq(false)
+    end
+  end
+
+  describe '#my_any?' do
+    it 'When no block and no argument are given, returns `true` when one of the elementes is truthy != (nil, false)' do
+      expect(arr_truthy.my_any?).to eq(true)
+    end
+
+    it 'When an array is empty and no block is given, will return false' do
+      expect(arr_empty.my_any?).to eq(false)
+    end
+
+    it 'raises an ArgumentError when more than one arguments are given' do
+      expect { array.my_any?(String, 1) }.to raise_error(ArgumentError)
+    end
+
+    it 'When block is given, it evaluates the elements and returns true when one of them meets the condition' do
+      expect(arr_string.my_any? { |word| word.length >= 3 }).to eq(true)
+    end
+
+    # rubocop:disable Metrics/LineLength
+    it 'When a RegEx is passed as an argument, it evaluates the elements and returns true when one of them matches the RegEx' do
+      # rubocop:enable Metrics/LineLength
+      expect(arr_string.my_any?(/t/)).to eq(true)
+    end
+
+    # rubocop:disable Metrics/LineLength
+    it 'When a Class is passed as an argument, it evaluates the elements and returns true when one of them it´s an instance of the Class' do
+      # rubocop:enable Metrics/LineLength
+      expect(arr_numeric.my_any?(Numeric)).to eq(true)
+    end
+
+    # rubocop:disable Metrics/LineLength
+    it 'When an argument (not a Class or RegEx) is passed, it evaluates the elements and returns true when one of them it´s an instance of the Class' do
+      # rubocop:enable Metrics/LineLength
+      expect(arr_numeric.my_any?(2)).to eq(false)
+    end
+
+    # rubocop:disable Metrics/LineLength
+    it 'When an argument and a block are given, it ignores the block and returns true if one of the elements meets the condition in the argument' do
+      # rubocop:enable Metrics/LineLength
+      expect(arr_string.my_any?(Numeric) { |word| word.length >= 3 }).to eq(false)
+    end
   end
 end

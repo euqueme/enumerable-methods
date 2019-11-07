@@ -41,13 +41,13 @@ module Enumerable
     output = true
     my_each do |element|
       if output
-        if block_given?
-          output = false unless yield(element)
-        elsif arg.is_a?(Class) || arg.is_a?(Regexp)
+        if arg.is_a?(Class) || arg.is_a?(Regexp)
           output = element.is_a?(arg) unless arg.is_a?(Regexp)
           output = !element.match(arg).nil? if arg.is_a?(Regexp)
         elsif arg
           output = element == arg
+        elsif block_given?
+          output = false unless yield(element)
         else
           output = false unless element
         end
@@ -59,13 +59,13 @@ module Enumerable
   def my_any?(arg = nil, &block)
     output = false
     my_each do |element|
-      if block_given?
-        output ||= block.call(element) unless output
-      elsif arg.is_a?(Class) || arg.is_a?(Regexp)
+      if arg.is_a?(Class) || arg.is_a?(Regexp)
         output ||= element.is_a?(arg) unless arg.is_a?(Regexp)
-        output ||= element.match?(arg) if arg.is_a?(Regexp)
+        output ||= !element.match(arg).nil? if arg.is_a?(Regexp)
       elsif arg
         output = true if element == arg
+      elsif block_given?
+        output ||= block.call(element) unless output
       elsif element || output
         output = true
       end
