@@ -45,7 +45,7 @@ module Enumerable
           output = false unless yield(element)
         elsif arg.is_a?(Class) || arg.is_a?(Regexp)
           output = element.is_a?(arg) unless arg.is_a?(Regexp)
-          output = element.match?(arg) if arg.is_a?(Regexp)
+          output = !element.match(arg).nil? if arg.is_a?(Regexp)
         elsif arg
           output = element == arg
         else
