@@ -184,7 +184,7 @@ RSpec.describe Enumerable do
 
     it 'validates that my_none is the negation of my_any method' do
       # rubocop:disable Metrics/LineLength
-      expect(arr_string.my_none?(Numeric) { |word| word.length >= 3 }).to eq(!arr_string.any?(Numeric) { |word| word.length >= 3 })
+      expect(arr_string.my_none?(Numeric) { |word| word.length >= 3 }).to eq(!arr_string.my_any?(Numeric) { |word| word.length >= 3 })
       # rubocop:enable Metrics/LineLength
     end
   end
@@ -262,6 +262,36 @@ RSpec.describe Enumerable do
 
     it 'raises an NoMethodError when block is given but the method in the block is not an operator' do
       expect { array.my_inject { |memo, element| memo > element } }.to raise_error(NoMethodError)
+    end
+  end
+
+  describe '#my_map' do
+    # rubocop:disable Metrics/LineLength
+    it 'When block is given, it passes each element as an argument of the method in the block and returns a new array' do
+      # rubocop:enable Metrics/LineLength
+      expect(array.my_map { |element| element + 2 }).to eq([3, 4, 5, 4])
+    end
+
+    it 'arguments are given, it will raise ArgumentError' do
+      expect { array.my_map(1, :*, 2) }.to raise_error(ArgumentError)
+    end
+
+    it 'When block and a proc are given, it will take as a priority the proc' do
+      proc_ex = proc { |element| element + 2 }
+      expect(array.my_map(proc_ex) { |element| element + 1 }).to eq([3, 4, 5, 4])
+    end
+
+    it 'When an array is empty and no block is given, will return an Enumerator' do
+      expect(arr_empty.my_map.class).to eq(Enumerator)
+    end
+
+    it 'When proc is given, it will return an array with the proc rules' do
+      proc_ex = proc { |element| element + 2 }
+      expect(array.my_map(proc_ex)).to eq([3, 4, 5, 4])
+    end
+
+    it 'When block is given, it will return an array with the block rules' do
+      expect(array.my_map { |element| element + 2 }).to eq([3, 4, 5, 4])
     end
   end
 end
