@@ -28,4 +28,16 @@ RSpec.describe Enumerable do
       # rubocop:enable Metrics/LineLength
     end
   end
+  
+  describe '#my_select' do
+    it 'returns an enumerable when no block is given' do
+      expect([1, 2, 3].my_select.class).to eq([1, 2, 3].select.class)
+    end
+
+    it 'returns an array when a block is given' do
+      # rubocop:disable Metrics/LineLength
+      expect([1, 2, 3].my_select { |element| "result: #{element}" }).to eq([1, 2, 3].each_with_index { |element| "result: #{element}" })
+      # rubocop:enable Metrics/LineLength
+    end
+  end
 end
