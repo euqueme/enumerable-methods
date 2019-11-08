@@ -9,6 +9,7 @@ module Enumerable
       size.times do |i|
         is_a?(Range) ? yield(min + i) : yield(self[i])
       end
+      self
     else
       to_enum
     end
@@ -19,6 +20,7 @@ module Enumerable
       size.times do |i|
         is_a?(Range) ? yield(min + i, i) : yield(self[i], i)
       end
+      self
     else
       to_enum
     end
@@ -39,13 +41,13 @@ module Enumerable
     output = true
     my_each do |element|
       if output
-        if block_given?
-          output = false unless yield(element)
-        elsif arg.is_a?(Class) || arg.is_a?(Regexp)
+        if arg.is_a?(Class) || arg.is_a?(Regexp)
           output = element.is_a?(arg) unless arg.is_a?(Regexp)
-          output = element.match?(arg) if arg.is_a?(Regexp)
+          output = !element.match(arg).nil? if arg.is_a?(Regexp)
         elsif arg
           output = element == arg
+        elsif block_given?
+          output = false unless yield(element)
         else
           output = false unless element
         end
@@ -57,13 +59,13 @@ module Enumerable
   def my_any?(arg = nil, &block)
     output = false
     my_each do |element|
-      if block_given?
-        output ||= block.call(element) unless output
-      elsif arg.is_a?(Class) || arg.is_a?(Regexp)
+      if arg.is_a?(Class) || arg.is_a?(Regexp)
         output ||= element.is_a?(arg) unless arg.is_a?(Regexp)
-        output ||= element.match?(arg) if arg.is_a?(Regexp)
+        output ||= !element.match(arg).nil? if arg.is_a?(Regexp)
       elsif arg
         output = true if element == arg
+      elsif block_given?
+        output ||= block.call(element) unless output
       elsif element || output
         output = true
       end
@@ -74,11 +76,11 @@ module Enumerable
   def my_count(arg = nil)
     counter = 0
     my_each do |element|
-      if block_given?
-        counter += 1 if yield(element)
-      elsif arg
+      if arg
         counter += 1 if element == arg
         counter += 1 if arg.is_a?(Regexp) && element.match?(arg)
+      elsif block_given?
+        counter += 1 if yield(element)
       else
         counter += 1
       end
@@ -88,14 +90,14 @@ module Enumerable
 
   def my_inject(arg = nil, arg2 = nil)
     output = is_a?(Range) ? min : self[0]
-    if block_given?
+    if arg2.is_a?(Symbol) || arg2.is_a?(String)
+      my_each_with_index { |ele, i| output = output.send(arg2, ele) if i.positive? }
+      output = output.send(arg2, arg)
+    elsif block_given?
       my_each_with_index { |ele, i| output = yield(output, ele) if i.positive? }
       output = yield(output, arg) if arg
     elsif arg.is_a?(Symbol) || arg.is_a?(String)
       my_each_with_index { |ele, i| output = output.send(arg, ele) if i.positive? }
-    elsif arg2.is_a?(Symbol) || arg2.is_a?(String)
-      my_each_with_index { |ele, i| output = output.send(arg2, ele) if i.positive? }
-      output = output.send(arg2, arg)
     end
     output
   end
