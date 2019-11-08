@@ -2,7 +2,7 @@
 
 # frozen_string_literal: true
 
-require '../main.rb'
+require_relative '../main.rb'
 
 RSpec.describe Enumerable do
   let(:array) { [1, 2, 3, 2] }
