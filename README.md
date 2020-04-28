@@ -46,8 +46,11 @@
 
 * [About the Project](#about-the-project)
   * [Built With](#built-with)
+* [Usage](#usage)
 * [Live Version](#live-version)
-* [Contact](#contact)
+* [Automated Test](#automated-test)
+* [Author](#author)
+* [Contributing](#-contributing)
 * [Acknowledgements](#acknowledgements)
 
 <!-- ABOUT THE PROJECT -->
@@ -59,29 +62,50 @@ This is the second project of the Microverse Ruby Section
 
 This is also the second Assignment of the Odin project curriculum https://www.theodinproject.com/courses/ruby-programming/lessons/advanced-building-blocks
 
-<!-- ABOUT THE PROJECT -->
-## Installation
-
-If you want to use the code you need to have ruby installed in your computer or execute it in web console like [this](https://repl.it) : 
-
 ### Built With
 This project was built using these technologies.
 * Ruby
 * Rubocop
 * VsCode
 * Notepad++
+* Rspec
+
+## Usage
+
+If you want to use the code you need to have ruby installed in your computer or execute it in web console like [this](https://repl.it) : 
 
 <!-- LIVE VERSION -->
 ## Live version
 
 You can see it working with some dummy test cases [here](https://repl.it/@MariaEugeniaEu2/liveEnumerables)
 
+<!-- AUTOMATED TEST -->
+## Automated Test
+
+to run the test clone or download the project, open a terminal in the project directory and run the following:
+
+```ruby
+rspec spec/test_enumerables
+```
+
 <!-- CONTACT -->
-## Contact
+## Author
 
-María Eugenia Quemé - [@MaruKK](https://twitter.com/MaruKK) - [@euqueme](https://github.com/euqueme) - euqueme@gmail.com
+👤 **María Eugenia Quemé**
 
-Project Link: [https://github.com/euqueme/enumerable-methods)
+- Github: [@euqueme](https://github.com/euqueme)
+- Linkedin: [María Eguenia Quemé Peña](https://www.linkedin.com/in/maria-queme/)
+
+<!-- CONTRIBUTING -->
+## 🤝 Contributing
+
+Contributions, issues and feature requests are welcome!
+
+Feel free to check the [issues page](https://github.com/euqueme/enumerable-methods/issues).
+
+## Show your support
+
+Give a ⭐️ if you like this project!
 
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
