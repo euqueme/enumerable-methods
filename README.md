@@ -72,7 +72,21 @@ This project was built using these technologies.
 
 ## Usage
 
-If you want to use the code you need to have ruby installed in your computer or execute it in web console like [this](https://repl.it) : 
+If you want to use the code you need to have ruby installed in your computer and copy the main.rb file from this project in your project or open an ``irb`` console and import it like this
+
+```require_relative main.rb```
+
+You can now use my enumerable methods like the ruby enumerables:
+
+- ``my_each`` == ``each``
+- ``my_each_with_index`` == ``each_with_index``
+- ``my_select`` == ``select``
+- ``my_count`` == ``count``
+- ``my_all`` == ``all``
+- ``my_any`` == ``any``
+- ``my_none`` == ``none``
+- ``my_map`` == ``map``
+- ``my_inject`` == ``inject``
 
 <!-- LIVE VERSION -->
 ## Live version
