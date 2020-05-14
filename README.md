@@ -58,6 +58,8 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://repl.it/@MariaEugeniaEu2/liveEnumerables)
 
+I recreated the Ruby enumerable methods using my own methods
+
 This is the second project of the Microverse Ruby Section
 
 This is also the second Assignment of the Odin project curriculum https://www.theodinproject.com/courses/ruby-programming/lessons/advanced-building-blocks
@@ -76,7 +78,7 @@ If you want to use the code you need to have ruby installed in your computer and
 
 ```require_relative main.rb```
 
-You can now use my enumerable methods like the ruby enumerables:
+You can now use my Enumerable methods like the ruby Enumerable methods:
 
 - ``my_each`` == ``each``
 - ``my_each_with_index`` == ``each_with_index``
@@ -96,7 +98,7 @@ You can see it working with some dummy test cases [here](https://repl.it/@MariaE
 <!-- AUTOMATED TEST -->
 ## Automated Test
 
-to run the test clone or download the project, open a terminal in the project directory and run the following:
+To run the test clone or download the project, open a terminal in the project directory and run the following:
 
 ```ruby
 rspec spec/test_enumerables
